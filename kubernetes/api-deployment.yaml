@@ -1,0 +1,35 @@
+---
+## Deployment for MyBooksReviews API
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eks-mbr-api
+  labels:
+    app: eks-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: eks-api
+  template:
+    metadata:
+      labels:
+        app: eks-api
+    spec:
+      containers:
+        - name: eks-mbr-api
+          image: 613036180535.dkr.ecr.us-east-2.amazonaws.com/api-lab-eks-ian
+          ports:
+            - containerPort: 8000
+          env:
+            - name: MONGO_USER
+              valueFrom:
+                secretKeyRef:
+                  name: api-secrets
+                  key: mongo_user
+            - name: MONGO_PASSWD
+              valueFrom:
+                secretKeyRef:
+                  name: api-secrets
+                  key: mongo_passwd

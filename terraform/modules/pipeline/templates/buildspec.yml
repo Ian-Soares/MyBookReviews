@@ -1,0 +1,42 @@
+version: 0.2
+phases:
+  install:
+    commands:
+      - echo "Install Phase - Not much to do"
+
+  pre_build:
+      commands:
+        - REPOSITORY_URI=${repository_url}
+        - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+        # Login to ECR Registry for docker to push the image to ECR Repository
+        - echo "Login in to Amazon ECR..."
+        - $(aws ecr get-login --no-include-email)
+        # Update Kube config Home Directory
+        - export KUBECONFIG=$HOME/.kube/config
+        
+  build:
+    commands:
+      # Build Docker Image
+      - echo "Build started on `date`"
+      - echo "Building the Docker image..."
+      - docker build -t $REPOSITORY_URI:latest ./api/
+      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+  post_build:
+    commands:
+      # Push Docker Image to ECR Repository
+      - echo "Build completed on `date`"
+      - echo "Pushing the Docker image to ECR Repository"
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      # Setup kubectl with our EKS Cluster              
+      - echo "Update Kube Config"      
+      - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME
+      # Apply changes to our Application using kubectl
+      - echo "Apply changes to kube manifests"            
+      - kubectl apply -f kubernetes/
+      - echo "Completed applying changes to Kubernetes Objects"           
+      # Create Artifacts which we can use if we want to continue our pipeline for other stages
+      - printf '[{"name":"api-deployment.yml","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > build.json         
+artifacts:
+  files:
+    - build.json
+    - kubernetes/*
