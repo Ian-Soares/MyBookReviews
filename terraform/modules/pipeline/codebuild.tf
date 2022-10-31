@@ -44,6 +44,16 @@ resource "aws_codebuild_project" "app_build" {
     }
 
     environment_variable {
+      name  = "MONGO_USER"
+      value = var.MONGO_USER
+    }
+
+    environment_variable {
+      name  = "MONGO_PASSWD"
+      value = var.MONGO_PASSWD
+    }
+
+    environment_variable {
       name  = "EKS_CLUSTER_NAME"
       value = var.cluster_name
     }

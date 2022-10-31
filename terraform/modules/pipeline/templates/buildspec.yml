@@ -5,14 +5,14 @@ phases:
       - echo "Install Phase - Not much to do"
 
   pre_build:
-      commands:
-        - REPOSITORY_URI=${repository_url}
-        - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-        # Login to ECR Registry for docker to push the image to ECR Repository
-        - echo "Login in to Amazon ECR..."
-        - $(aws ecr get-login --no-include-email)
-        # Update Kube config Home Directory
-        - export KUBECONFIG=$HOME/.kube/config
+    commands:
+      - REPOSITORY_URI=${repository_url}
+      - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      # Login to ECR Registry for docker to push the image to ECR Repository
+      - echo "Login in to Amazon ECR..."
+      - $(aws ecr get-login --no-include-email)
+      # Update Kube config Home Directory
+      - export KUBECONFIG=$HOME/.kube/config
         
   build:
     commands:
@@ -31,7 +31,10 @@ phases:
       - echo "Update Kube Config"      
       - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME
       # Apply changes to our Application using kubectl
-      - echo "Apply changes to kube manifests"            
+      - echo "Apply changes to kube manifests"    
+      - echo "$MONGO_USER" > ./mongo_user
+      - echo "$MONGO_PASSWD" > ./mongo_passwd
+      - kubectl create secret generic api-secrets --from-file=./mongo_user --from-file=./mongo_passwd        
       - kubectl apply -f kubernetes/
       - echo "Completed applying changes to Kubernetes Objects"           
       # Create Artifacts which we can use if we want to continue our pipeline for other stages

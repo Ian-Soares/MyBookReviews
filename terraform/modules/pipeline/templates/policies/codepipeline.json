@@ -88,7 +88,7 @@
       {
         "Effect": "Allow",
         "Action": "codestar-connections:UseConnection",
-        "Resource": "arn:aws:codestar-connections:us-east-1:613036180535:connection/1da78121-9934-431b-a509-d1a2c84abac2"
+        "Resource": "*"
       },
       {
         "Effect": "Allow",

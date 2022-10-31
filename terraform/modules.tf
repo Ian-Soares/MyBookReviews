@@ -51,6 +51,8 @@ module "pipeline" {
   AWS_ACCESS_KEY_ID     = var.AWS_ACCESS_KEY_ID
   AWS_SECRET_ACCESS_KEY = var.AWS_SECRET_ACCESS_KEY
   AWS_SESSION_TOKEN     = var.AWS_SESSION_TOKEN
+  MONGO_USER            = var.MONGO_USER
+  MONGO_PASSWD          = var.MONGO_PASSWD
 
   subnet_ids = [
     module.vpc.private_subnet_1a,

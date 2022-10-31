@@ -5,7 +5,7 @@ metadata:
   labels:
     app: eks-api 
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: eks-api
   ports:

@@ -19,7 +19,8 @@ spec:
     spec:
       containers:
         - name: eks-mbr-api
-          image: 613036180535.dkr.ecr.us-east-2.amazonaws.com/api-lab-eks-ian
+          # image: 613036180535.dkr.ecr.us-east-2.amazonaws.com/api-lab-eks-ian
+          image: iansoares/api_mbr
           ports:
             - containerPort: 8000
           env:

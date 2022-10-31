@@ -50,3 +50,11 @@ variable "AWS_SECRET_ACCESS_KEY" {
 variable "AWS_SESSION_TOKEN" {
   description = "AWS Session Token for CodeBuild"
 }
+
+variable "MONGO_USER" {
+  description = "MongoDB User"
+}
+
+variable "MONGO_PASSWD" {
+  description = "MongoDB Password"
+}

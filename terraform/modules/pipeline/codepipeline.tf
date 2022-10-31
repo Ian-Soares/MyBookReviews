@@ -1,5 +1,5 @@
 data "aws_codestarconnections_connection" "github" {
-  name = "ian-soares"
+  arn = "arn:aws:codestar-connections:us-east-2:613036180535:connection/099b6295-3aea-4079-b1a5-d16957ba6d01"
 }
 
 resource "aws_codepipeline" "pipeline" {
