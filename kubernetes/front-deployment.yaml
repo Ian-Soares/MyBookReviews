@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: front-depl
+  labels:
+    name: front-depl
+    tier: frontend
+spec:
+  replicas: 4
+  selector:
+    matchLabels: 
+      name: front-pod
+      tier: frontend
+  template:
+    metadata:
+      name: front-pod
+      labels:
+        name: front-pod
+        tier: frontend
+    spec:
+      containers:
+        - name: nginx
+          image: iansoares/front-colorflipper
+          ports:
+            - containerPort: 80
